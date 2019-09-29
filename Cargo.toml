@@ -1,0 +1,20 @@
+[package]
+name = "wookong-solo"
+version = "0.1.2"
+authors = ["chester"]
+edition = "2018"
+readme = "README.md"
+license = "MIT/Apache-2.0"
+repository = "https://github.com/chesterliliang/exrng.git"
+documentation = "https://docs.rs/wookong-solo"
+keywords = ["wookong", "solo", "polkadot", "substrate", "driver"]
+categories = ["algorithms", "no-std"]
+description = "Wookong Solo driver crate"
+exclude = [ ".gitignore", "TESTVECTORS", "res/*" ]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[build-dependencies]
+cc = "1.0"
