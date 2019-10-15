@@ -5,13 +5,13 @@
 
 //#define INPUT_LOG
 
-int solo_sign(unsigned char* msg, int ilen, unsigned char* sign)
+int solo_select(unsigned char* pk, unsigned char* path, unsigned int len)
 {
-
     UINT8 data_buf[SOLO_MAX_LEN] = {0};
-    UINT16 len = 0;
+    UINT16 l = 0;
     UINT16 res_len = 0;
-    UINT32 rv = 0;  
+    UINT32 rv = 0;
+    UINT8 data[SOLO_MAX_LEN] = { 0 };  
 #ifdef INPUT_LOG
     UINT32 i = 0;
     printf("\n ************input********** %d\n", ilen);
@@ -19,7 +19,42 @@ int solo_sign(unsigned char* msg, int ilen, unsigned char* sign)
         printf("%x",msg[i]);
     printf("\n");
 #endif
-    rv = gen_cmd(SOLO_CMD_SIGN, msg, ilen, data_buf, &len);
+    memcpy(data,pk,32);
+    if(len!=0)
+        memcpy(data+32,path,len);
+    rv = gen_cmd(SOLO_CMD_SIGN, data, 32+len, data_buf, &l);
+    if (rv)
+    {
+        return SOLO_ERROR_PARA;
+    }
+
+    rv = handle_cmd(data_buf, len, SOLO_DELAY_COMMON, data_buf, &res_len); 
+    if (rv)
+    {
+        return rv;
+    }
+    return SOLO_OK;
+}
+
+int solo_sign(unsigned char* msg, int ilen, unsigned char* path, unsigned int plen, unsigned char* sign)
+{
+
+    UINT8 data_buf[SOLO_MAX_LEN] = {0};
+    UINT16 len = 0;
+    UINT16 res_len = 0;
+    UINT32 rv = 0;  
+    UINT8 data[SOLO_MAX_LEN] = { 0 }; 
+#ifdef INPUT_LOG
+    UINT32 i = 0;
+    printf("\n ************input********** %d\n", ilen);
+    for(i=0;i<ilen;i++)
+        printf("%x",msg[i]);
+    printf("\n");
+#endif
+    memcpy(data,msg,ilen);
+    if(plen!=0)
+        memcpy(data+ilen,path,plen);//this is buggy, just for clear unused warning, will change next version
+    rv = gen_cmd(SOLO_CMD_SIGN, data, ilen+plen, data_buf, &len);
     if (rv)
     {
         return SOLO_ERROR_PARA;
@@ -77,14 +112,17 @@ int solo_generate(unsigned char* seed)
     return SOLO_OK;
 }
 
-int solo_pubkey(unsigned char* pk)
+int solo_pubkey(unsigned char* pk, unsigned char* path, unsigned int plen)
 {
     UINT8 data_buf[SOLO_MAX_LEN] = {0};
     UINT16 len = 0;
     UINT16 res_len = 0;
     UINT32 rv = 0;  
+    UINT8 data[SOLO_MAX_LEN] = { 0 }; 
 
-    rv = gen_cmd(SOLO_CMD_GETPUB, 0, 0, data_buf, &len);
+    if(plen!=0)
+        memcpy(data,path,plen);//this is buggy, just for clear unused warning, will change next version
+    rv = gen_cmd(SOLO_CMD_SIGN, data, plen, data_buf, &len);
     if (rv)
     {
         return SOLO_ERROR_PARA;

@@ -36,6 +36,7 @@ typedef unsigned char UINT8;
 #define SOLO_CMD_IMPORT         3
 #define SOLO_CMD_GETPUB         4
 #define SOLO_CMD_FORMAT         5
+#define SOLO_CMD_SELECT         6
 
 //Error code
 #define SOLO_OK                     0
