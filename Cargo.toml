@@ -1,6 +1,6 @@
 [package]
 name = "wookong-solo"
-version = "0.1.3"
+version = "0.1.4"
 authors = ["chester"]
 edition = "2018"
 readme = "README.md"
