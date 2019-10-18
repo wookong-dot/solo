@@ -33,4 +33,5 @@ Allow multi seed, max 128. All seed will be indexed by 0~127.
 Select which seed to use by using solo_select. Given account/pubkey and derive path to search the right seed.
 If found. The device will set the seed and derive path as default. Sign and getpub will use it if there is no more input to set.
 
+If users do not select any seed and give any derive path, device will use the first seed and default derive path 
 
